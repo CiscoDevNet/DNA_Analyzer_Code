@@ -135,8 +135,8 @@ provision_query_tuple= (("DB_PROV_1024"),("Aggregated Device configstatus"),("se
 provision_query_tuple_list.append(provision_query_tuple)
 provision_query_tuple= (("DB_PROV_1025"),("Deviceconfig status"),("select id,instanceuuid,servicetype,deviceid,namespace,status,cfsversion,error_message,workflowid,taskid from deviceconfigstatus where islatest=true order by id ASC;"))
 provision_query_tuple_list.append(provision_query_tuple)
-provision_query_tuple= (("DB_PROV_1026"),("Serializedsnapshot details"),("select id,instanceuuid,namespace,version,createtime from serializedsnapshot order by id ASC;"))
-provision_query_tuple_list.append(provision_query_tuple)
+#provision_query_tuple= (("DB_PROV_1026"),("Serializedsnapshot details"),("select id,instanceuuid,namespace,version,createtime from serializedsnapshot order by id ASC;"))
+#provision_query_tuple_list.append(provision_query_tuple)
 
 
 # Wireless provision query
