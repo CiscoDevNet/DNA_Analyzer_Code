@@ -38,7 +38,7 @@ from log_analyzer.Onboarding_Log_Analyzer import parse_onboarding_log_fn
 from log_analyzer.Spf_Service_Log_Analyzer import parse_spf_service_log_fn
 
 # Version Number - enatataj - Update every release.
-version ='1.0.1'  # TODO FIXME
+version ='1.0.2'  # TODO FIXME
 
 class color:
     PURPLE = '\033[95m'
@@ -203,10 +203,9 @@ def main_menu():
     print(color.PURPLE + "\t\t\t 1 -> Log Analyzer " + color.END)
     print(color.PURPLE + "\t\t\t 2 -> Database Data Collection " + color.END)
     print(color.PURPLE + "\t\t\t 3 -> Database Compliance checker " + color.END)
-    print(color.PURPLE + "\t\t\t 4 -> SDA Telemetry " + color.END)
-    print(color.PURPLE + "\t\t\t 5 -> DNAC SDA Audit Report " + color.END)
-    print(color.PURPLE + "\t\t\t 6 -> Search Known Cisco External Defect / Issues " + color.END)
-    print(color.BLUE + "\t\t\t 7 -> Exit " + color.END)
+    print(color.PURPLE + "\t\t\t 4 -> SDA Audit and Telemetry " + color.END)
+    print(color.PURPLE + "\t\t\t 5 -> Search Known Cisco External Defect / Issues " + color.END)
+    print(color.BLUE + "\t\t\t 6 -> Exit " + color.END)
     print(color.DARKCYAN+"\n\n\t For Feedback/Support Reachout : log-analyzer-feedback@cisco.com"+ color.END+"\n")
     print("*" * 75)
     option = int(input(color.GREEN + "\n\t Enter the Option : " + color.END))
@@ -221,15 +220,15 @@ def main_menu():
         from sda_compliance.SDA_Compliance_Checker import collect_dnac_compliance_data_fn
         collect_dnac_compliance_data_fn()
     elif option == 4:
-        from sda_telemetry.SDA_Telemetry import collect_sda_telemetry_data_fn
-        collect_sda_telemetry_data_fn()
+        from sda_audit_telemetry.SDA_Audit_Telemetry_Report import collect_dnac_audit_telemetry_data_fn
+        collect_dnac_audit_telemetry_data_fn()
+    #elif option == 5:
+        #from sda_audit.SDA_Audit_Report import collect_dnac_audit_data_fn
+        #collect_dnac_audit_data_fn()
     elif option == 5:
-        from sda_audit.SDA_Audit_Report import collect_dnac_audit_data_fn
-        collect_dnac_audit_data_fn()
-    elif option == 6:
         from search.Cisco_Defect_search import defect_search_menu_fn
         defect_search_menu_fn()
-    elif option == 7:
+    elif option == 6:
         print(color.BOLD + color.GREEN + "\t\t\t Thanks for using the script !" + color.END)
     else:
         print(color.BOLD + color.RED + "\t\t\t Invalid Option" + color.END)
