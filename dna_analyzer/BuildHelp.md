@@ -16,7 +16,7 @@
  ## Step 3
  -  Install pyinstaller and dependent packages
   ```
-    pip install pyinstaller==3.6 --no-use-pep517
+    pip install pyinstaller==3.6
     pip install requests
   ```
 
@@ -27,6 +27,6 @@
      find . | grep -E "(pycache|.pyc$)" | xargs rm -rf
   - Build the Project
     ````
-     pyinstaller —onefile DNA_Analyzer.py
+     pyinstaller DNA_Analyzer.py --onefile
   - Find the distribution directory contains the Runtime of the script.
    
