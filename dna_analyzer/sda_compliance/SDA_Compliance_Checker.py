@@ -100,6 +100,9 @@ provision_compliance_query_tuple.append(query_tuple)
 # Device Failed in provision
 query_tuple=(("PROV-INC-FAILED-1021"),("device_provision_failed"),("Devices are Failed in Provision "),("select {} from networkdevice where instanceuuid IN (select distinct deviceid from deviceconfigstatus where islatest=true and status IN ('Failed','Configuring','Rollback Success'));"))
 provision_compliance_query_tuple.append(query_tuple)
+# Device Failed in provision
+query_tuple=(("PROV-INC-MULTICAST-1022"),("device_multicast_duplicate"),("Multicast duplicate entry CSCvv89025 "),("select contextValue , count(*) from ippoolcontext where contextkey='networkDeviceIdcom.cisco.ef.lan.rfs.util.ConnectivityDomainIpam$Feature' group by contextvalue having count(*) > 1;"))
+provision_compliance_query_tuple.append(query_tuple)
 
 
 # Host onboarding compliance Query
@@ -160,9 +163,13 @@ migration_compliance_query_tuple.append(query_tuple)
 
 report_data_tuple_list = list()
 # Database Complaince Checker
-def collect_dnac_compliance_data_fn():
+def collect_dnac_compliance_data_fn(log_file):
     script_start_time=time.strftime('%Y-%m-%d_%H:%M:%S',time.localtime())
-    outfile = open(dnac_compliance_log_file, "w+")
+    global outfile
+    if log_file is "":
+        outfile = open(dnac_compliance_log_file, "a+")
+    else:
+        outfile = open(log_file, "a+")
     output = []
     script_start_time=time.strftime('%Y-%m-%d_%H:%M:%S',time.localtime())
     print(color.BOLD + color.DARKCYAN + "\n\t\t\t Provision Related Compliance Data" + color.END)
@@ -274,5 +281,5 @@ if __name__ == "__main__":
         os.makedirs(LOG_PATH)
     if not os.path.exists(REPORT_PATH):
         os.makedirs(REPORT_PATH)
-    collect_dnac_compliance_data_fn()
+    collect_dnac_compliance_data_fn("")
 
