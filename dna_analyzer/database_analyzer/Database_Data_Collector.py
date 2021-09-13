@@ -26,6 +26,7 @@ class color:
 
 LOG_PATH='./dna_analyzer_logs/'
 timestamp = datetime.utcnow().strftime("%m-%d-%Y_%H-%M-%S_UTC")
+all_sda_app_log_file = LOG_PATH+"All_SDA_Application_postgres_data_" + timestamp + ".log"
 lan_auto_log_file = LOG_PATH+"LAN_Automation_postgres_data_" + timestamp + ".log"
 provision_log_file = LOG_PATH+"Provision_postgres_data_" + timestamp + ".log"
 host_onb_log_file = LOG_PATH+"Host_onboarding_postgres_data_" + timestamp + ".log"
@@ -80,6 +81,8 @@ lan_automation_query_tuple_list.append(lan_automation_query_tuple)
 lan_automation_query_tuple = (("DB_LAN_1016"),("Site IP Pool reservation"),("select id,instanceuuid,siteid,resourceid,resourceowner from siteresourcemap order by id ASC;"))
 lan_automation_query_tuple_list.append(lan_automation_query_tuple)
 lan_automation_query_tuple = (("DB_LAN_1017"),("Discovered site details"),("select id,instanceuuid,name,groupnamehierarchy,parentgroup_id from resourcegroup where instanceuuid in (select siteid from networkorchestration) order by id ASC;"))
+lan_automation_query_tuple_list.append(lan_automation_query_tuple)
+lan_automation_query_tuple = (("DB_LAN_1018"),("Ip Address Block List"),("select * from ipaddressgeneralrange order by id;"))
 lan_automation_query_tuple_list.append(lan_automation_query_tuple)
 
 # Provision related Query
@@ -138,7 +141,6 @@ provision_query_tuple_list.append(provision_query_tuple)
 #provision_query_tuple= (("DB_PROV_1026"),("Serializedsnapshot details"),("select id,instanceuuid,namespace,version,createtime from serializedsnapshot order by id ASC;"))
 #provision_query_tuple_list.append(provision_query_tuple)
 
-
 # Wireless provision query
 provision_query_tuple= (("DB_PROV_1026"),("APWirelessconfiguration cfs"),("select id,instanceuuid,name,createtime,provisioningstate,deviceinfo_id,segment_id from customerfacingservice where classname='APWirelessConfiguration' order by id ASC;"))
 provision_query_tuple_list.append(provision_query_tuple)
@@ -152,6 +154,15 @@ provision_query_tuple= (("DB_PROV_1030"),("WLAN details"),("select wlan_id,ssid,
 provision_query_tuple_list.append(provision_query_tuple)
 provision_query_tuple= (("DB_PROV_1031"),("WLAN filtered cfs"),("select id,instanceuuid,name,createtime,provisioningstate,deviceinfo_id,segment_id,classname from customerfacingservice where id IN (select wlan_id from wlan);"))
 provision_query_tuple_list.append(provision_query_tuple)
+provision_query_tuple= (("DB_PROV_1032"),("Multicast Duplicate CSCvv89025"),("select contextValue , count(*) from ippoolcontext where contextkey='networkDeviceIdcom.cisco.ef.lan.rfs.util.ConnectivityDomainIpam$Feature' group by contextvalue having count(*) > 1;"))
+provision_query_tuple_list.append(provision_query_tuple)
+provision_query_tuple= (("DB_PROV_1033"),("RF Profile"),("select * from rfprofile order by id;"))
+provision_query_tuple_list.append(provision_query_tuple)
+provision_query_tuple= (("DB_PROV_1034"),("RF Profile cfs"),("select * from rfprofilecfs order by id;"))
+provision_query_tuple_list.append(provision_query_tuple)
+provision_query_tuple= (("DB_PROV_1035"),("Commonsetting flattened"),("select * from commonsettingflattened order  by id;"))
+provision_query_tuple_list.append(provision_query_tuple)
+
 
 # Host onboarding related Query
 host_onbd_query_tuple_list = list()
@@ -191,7 +202,7 @@ host_onbd_query_tuple = (("DB_PROV_HOST_1015"),("CFS for Connectivity domain"),(
 host_onbd_query_tuple_list.append(host_onbd_query_tuple)
 host_onbd_query_tuple = (("DB_PROV_HOST_1016"),("Resource service pool"),("select id,instanceuuid,resourceallocations,name,owner,authentityid from resourceservicepool order by id ASC;"))
 host_onbd_query_tuple_list.append(host_onbd_query_tuple)
-host_onbd_query_tuple = (("DB_PROV_HOST_1017"),("Resource service service"),("select id,instanceuuid,resource_,parentuuid,authentityid from resourceserviceresource order by id ASC"))
+host_onbd_query_tuple = (("DB_PROV_HOST_1017"),("Resource service resource"),("select id,instanceuuid,resource_,parentuuid,authentityid from resourceserviceresource order by id ASC"))
 host_onbd_query_tuple_list.append(host_onbd_query_tuple)
 host_onbd_query_tuple = (("DB_PROV_HOST_1018"),("Resource Service context"),("select id,instanceuuid,contextkey,contextvalue,resourceservicepool_id,authentityid from resourceservicecontext order by id ASC;"))
 host_onbd_query_tuple_list.append(host_onbd_query_tuple)
@@ -254,6 +265,15 @@ ipam_query_tuple = (("DB_IPAM_1008"),("External IPAM Detail"),("select id,displa
 ipam_query_tuple_list.append(ipam_query_tuple)
 ipam_query_tuple = (("DB_IPAM_1009"),("IP Address Reserved from IP Addresspoolinfo"),("select id,instanceuuid,ipaddress,apicappname,featurename,subnetinfo,lastupdatetime,ipaddresspoolinfo_id from ipaddressreservedrange where ipaddresspoolinfo_id IN (select id from ipaddresspoolinfo);"))
 ipam_query_tuple_list.append(ipam_query_tuple)
+ipam_query_tuple = (("DB_IPAM_1010"),("IP Address Block List "),("select * from ipaddressgeneralrange order by id;"))
+ipam_query_tuple_list.append(ipam_query_tuple)
+ipam_query_tuple = (("DB_IPAM_1011"),("Resource service pool"),("select id,instanceuuid,resourceallocations,name,owner,authentityid from resourceservicepool order by id ASC;"))
+ipam_query_tuple_list.append(ipam_query_tuple)
+ipam_query_tuple = (("DB_IPAM_1012"),("Resource service resource"),("select id,instanceuuid,resource_,parentuuid,authentityid from resourceserviceresource order by id ASC"))
+ipam_query_tuple_list.append(ipam_query_tuple)
+ipam_query_tuple = (("DB_IPAM_1013"),("Resource Service context"),("select id,instanceuuid,contextkey,contextvalue,resourceservicepool_id,authentityid from resourceservicecontext order by id ASC;"))
+ipam_query_tuple_list.append(ipam_query_tuple)
+
 
 
 # Migration Related Query
@@ -340,9 +360,31 @@ ssid_prov_query_tuple_list.append(ssid_prov_query_tuple)
 ssid_prov_query_tuple = (("DB_SSID_1016"),("Site profile details"),("Select * from siteprofilesite where siteuuid in (select siteid from deviceinfo where networkdeviceid in (select instanceuuid from networkdevice where managementipaddress='WLC_ADDRESS'));"))
 ssid_prov_query_tuple_list.append(ssid_prov_query_tuple)
 
+# Collect SDA App Data Collection
+def collect_all_sda_app_data_fn(log_file):
+    collect_ipam_data_fn(log_file)
+    collect_ise_data_fn(log_file)
+    collect_lan_automation_data_fn(log_file)
+    collect_host_onboarding_data_fn(log_file)
+    collect_migration_data_fn(log_file)
+    collect_sda_compliance_data_fn(log_file)
+    collect_audit_tememetry_data_fn(log_file)
+
+
+# Collect Compliance Data
+def collect_sda_compliance_data_fn(log_file):
+    from sda_compliance.SDA_Compliance_Checker import collect_dnac_compliance_data_fn
+    collect_dnac_compliance_data_fn(log_file)
+
+# Collect Audit and Telemetry
+def collect_audit_tememetry_data_fn(log_file):
+    from sda_audit_telemetry.SDA_Audit_Telemetry_Report import collect_dnac_audit_telemetry_data_fn
+    collect_dnac_audit_telemetry_data_fn(log_file)
+
+
 # LAN Automation Data Collection
-def collect_lan_automation_data_fn():
-    outfile = open(lan_auto_log_file, "w+")
+def collect_lan_automation_data_fn(log_file):
+    outfile = open(log_file, "a+")
     output = []
     print(color.BOLD + color.DARKCYAN + "\n\t\t\t LAN Automation Related Data Collection \n" + color.END)
     output.append("\n\t\t\t LAN Automation Related Data Collection\n\n")
@@ -353,8 +395,8 @@ def collect_lan_automation_data_fn():
 
 
 # Provision related data collection
-def collect_provision_data_fn():
-    outfile = open(provision_log_file, "w+")
+def collect_provision_data_fn(log_file):
+    outfile = open(log_file, "a+")
     output = []
     print(color.BOLD + color.DARKCYAN + "\n\t\t\t Provision Related Data Collection" + color.END)
     output.append("\n\t\t\t Provision Related Data Collection \n\n")
@@ -366,8 +408,8 @@ def collect_provision_data_fn():
 
 
 # Hostonboarding related data collection
-def collect_host_onboarding_data_fn():
-    outfile = open(host_onb_log_file, "w+")
+def collect_host_onboarding_data_fn(log_file):
+    outfile = open(log_file, "a+")
     output = []
     print(color.BOLD + color.DARKCYAN + "\n\t\t\t Provision Related Data Collection" + color.END)
     output.append("\n\t\t\t Provision Related Data Collection \n\n")
@@ -385,8 +427,8 @@ def collect_host_onboarding_data_fn():
 
 
 # Device based data collection
-def collect_device_based_data_fn():
-    outfile = open(device_log_file, "w+")
+def collect_device_based_data_fn(log_file):
+    outfile = open(log_file, "a+")
     output = []
     try:
         deviceip = raw_input(color.GREEN + "\n\t Enter the Device IP Address : " + color.END)
@@ -402,8 +444,8 @@ def collect_device_based_data_fn():
     writeIntoFile(output, outfile)
 
 # IPAM Related Data Collection
-def collect_ipam_data_fn():
-    outfile = open(ipam_log_file, "w+")
+def collect_ipam_data_fn(log_file):
+    outfile = open(log_file, "a+")
     output = []
     print(color.BOLD + color.DARKCYAN + "\n\t\t\t IPAM Related Data Collection \n" + color.END)
     output.append("\n\t\t\t IPAM Related Data Collection\n\n")
@@ -414,8 +456,8 @@ def collect_ipam_data_fn():
 
 
 # Migration Data Collection
-def collect_migration_data_fn():
-    outfile = open(migration_log_file, "w+")
+def collect_migration_data_fn(log_file):
+    outfile = open(log_file, "a+")
     output = []
     print(color.BOLD + color.DARKCYAN + "\n\t\t\t Migration Data Collection" + color.END)
     output.append('\n\t\t\t Migration Data Collection ')
@@ -426,8 +468,8 @@ def collect_migration_data_fn():
 
 
 # ISE Data Collection
-def collect_ise_data_fn():
-    outfile = open(ise_log_file, "w+")
+def collect_ise_data_fn(log_file):
+    outfile = open(log_file, "a+")
     output = []
 
     print(color.BOLD + color.DARKCYAN + "\n\t\t\t ISE Integration Related Data Collection \n" + color.END)
@@ -440,8 +482,8 @@ def collect_ise_data_fn():
 
 
 # SSID based data collection
-def collect_ssid_prov_data_fn():
-    outfile = open(ssid_log_file, "w+")
+def collect_ssid_prov_data_fn(log_file):
+    outfile = open(log_file, "a+")
     output = []
     try:
         deviceip = raw_input(color.GREEN + "\n\t Enter the WLC IP Address : " + color.END)
@@ -456,8 +498,8 @@ def collect_ssid_prov_data_fn():
     writeIntoFile(output, outfile)
 
 # AP based data collection
-def collect_ap_prov_data_fn():
-    outfile = open(ap_log_file, "w+")
+def collect_ap_prov_data_fn(log_file):
+    outfile = open(log_file, "a+")
     output = []
     try:
         ssid_name = raw_input(color.GREEN + "\n\t Enter the SSID NAME : " + color.END)
@@ -500,40 +542,43 @@ def database_data_collection_fn():
     print("*" * 75)
     print(color.BOLD + color.DARKCYAN + "\t\t\t\t\t\t Database Data Collection " + color.END)
     print(color.BOLD + color.BLUE + "\t\t " + "Options" + color.END)
-    print(color.PURPLE + "\t\t\t 1 -> LAN Automation " + color.END)
-    print(color.PURPLE + "\t\t\t 2 -> Device Provision " + color.END)
-    print(color.PURPLE + "\t\t\t 3 -> Host Onboarding " + color.END)
-    print(color.PURPLE + "\t\t\t 4 -> Device based Data Collection " + color.END)
-    print(color.PURPLE + "\t\t\t 5 -> IPAM  " + color.END)
-    print(color.PURPLE + "\t\t\t 6 -> ISE  " + color.END)
-    print(color.PURPLE + "\t\t\t 7 -> Migration " + color.END)
-    print(color.PURPLE + "\t\t\t 8 -> SSID Provisioning " + color.END)
-    print(color.PURPLE + "\t\t\t 9 -> AP Provisioning " + color.END)
-    print(color.BLUE + "\t\t\t 10 -> Previous Menu" + color.END)
-    print(color.BLUE + "\t\t\t 11 -> Exit" + color.END)
+    print(color.PURPLE + "\t\t\t 1 -> All SDA Application " + color.END)
+    print(color.PURPLE + "\t\t\t 2 -> LAN Automation " + color.END)
+    print(color.PURPLE + "\t\t\t 3 -> Device Provision " + color.END)
+    print(color.PURPLE + "\t\t\t 4 -> Host Onboarding " + color.END)
+    print(color.PURPLE + "\t\t\t 5 -> Device based Data Collection " + color.END)
+    print(color.PURPLE + "\t\t\t 6 -> IPAM  " + color.END)
+    print(color.PURPLE + "\t\t\t 7 -> ISE  " + color.END)
+    print(color.PURPLE + "\t\t\t 8 -> Migration " + color.END)
+    print(color.PURPLE + "\t\t\t 9 -> SSID Provisioning " + color.END)
+    print(color.PURPLE + "\t\t\t 10 -> AP Provisioning " + color.END)
+    print(color.BLUE + "\t\t\t 11 -> Previous Menu" + color.END)
+    print(color.BLUE + "\t\t\t 12 -> Exit" + color.END)
     print("*" * 75)
     option = int(input(color.GREEN + "\n\t Enter the Option : " + color.END))
     if option == 1:
-        collect_lan_automation_data_fn()
+        collect_all_sda_app_data_fn(all_sda_app_log_file)
     elif option == 2:
-        collect_provision_data_fn()
+        collect_lan_automation_data_fn(lan_auto_log_file)
     elif option == 3:
-        collect_host_onboarding_data_fn()
+        collect_provision_data_fn(provision_log_file)
     elif option == 4:
-        collect_device_based_data_fn()
+        collect_host_onboarding_data_fn(host_onb_log_file)
     elif option == 5:
-        collect_ipam_data_fn()
+        collect_device_based_data_fn(device_log_file)
     elif option == 6:
-        collect_ise_data_fn()
+        collect_ipam_data_fn(ipam_log_file)
     elif option == 7:
-        collect_migration_data_fn()
+        collect_ise_data_fn(ise_log_file)
     elif option == 8:
-        collect_ssid_prov_data_fn()
+        collect_migration_data_fn(migration_log_file)
     elif option == 9:
-        collect_ap_prov_data_fn()
+        collect_ssid_prov_data_fn(ssid_log_file)
     elif option == 10:
-        return "pre_menu"
+        collect_ap_prov_data_fn(ap_log_file)
     elif option == 11:
+        return "pre_menu"
+    elif option == 12:
         print(color.BOLD + color.GREEN + "\t\t " + "Thanks for using the script !" + color.END)
     else:
         print(color.BOLD + color.RED + "\t\t " + "Invalid Data Collection option" + color.END)
