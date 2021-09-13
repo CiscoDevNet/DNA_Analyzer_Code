@@ -13,7 +13,7 @@ import os
 from fpdf_all import FPDF
 
 # Version Number - enatataj - Update every release.
-version ='1.0.2'  # TODO FIXME
+version ='1.0.3'  # TODO FIXME
 
 class PDF(FPDF):
     def header(self):
