@@ -212,8 +212,12 @@ sda_telemetry_query_tuple.append(query_tuple)
 
 report_data_tuple_list = list()
 # DNAC Audit Report
-def collect_dnac_audit_telemetry_data_fn():
-    outfile = open(sda_audit_log_file, "w+")
+def collect_dnac_audit_telemetry_data_fn(log_file):
+    global outfile
+    if log_file is "":
+        outfile = open(sda_audit_log_file, "a+")
+    else:
+        outfile = open(log_file, "a+")
     output = []
     script_start_time=time.strftime('%Y-%m-%d_%H:%M:%S',time.localtime())
     print(color.BOLD + color.DARKCYAN + "\n\t\t\t SDA - Audit - Inventory " + color.END)
@@ -315,4 +319,4 @@ if __name__ == "__main__":
         os.makedirs(LOG_PATH)
     if not os.path.exists(REPORT_PATH):
         os.makedirs(REPORT_PATH)
-    collect_dnac_audit_telemetry_data_fn()
+    collect_dnac_audit_telemetry_data_fn("")
