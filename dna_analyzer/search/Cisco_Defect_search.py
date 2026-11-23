@@ -38,12 +38,24 @@ LOG_PATH='./dna_analyzer_logs/'
 timestamp = datetime.utcnow().strftime("%m-%d-%Y_%H-%M-%S_UTC")
 defect_log_file = LOG_PATH+"Defect_list_" + timestamp + ".log"
 
+CISCO_API_CLIENT_ID_ENV = "CISCO_API_CLIENT_ID"
+CISCO_API_CLIENT_SECRET_ENV = "CISCO_API_CLIENT_SECRET"
+TOKEN_URL = "https://cloudsso.cisco.com/as/token.oauth2"
+
 
 def get_token():
-    CLIENT_ID = "ummafwzqyeju3ujqu5m82ngc"
-    CLIENT_SECRET = "<REVOKED_GITGUARDIAN_618373>"
-    TOKEN_URL = "https://cloudsso.cisco.com/as/token.oauth2"
-    client_auth = requests.auth.HTTPBasicAuth(CLIENT_ID, CLIENT_SECRET)
+    client_id = os.environ.get(CISCO_API_CLIENT_ID_ENV)
+    client_secret = os.environ.get(CISCO_API_CLIENT_SECRET_ENV)
+    missing = [name for name, value in (
+        (CISCO_API_CLIENT_ID_ENV, client_id),
+        (CISCO_API_CLIENT_SECRET_ENV, client_secret),
+    ) if not value]
+    if missing:
+        raise RuntimeError(
+            "Missing required environment variable(s): " + ", ".join(missing)
+        )
+
+    client_auth = requests.auth.HTTPBasicAuth(client_id, client_secret)
     post_data = {"grant_type": "client_credentials"}
     response = requests.post(TOKEN_URL, auth=client_auth, data=post_data)
     token_json = response.json()["access_token"]
