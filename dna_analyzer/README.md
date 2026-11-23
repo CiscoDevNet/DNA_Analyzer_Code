@@ -66,6 +66,18 @@ chmod 755 *
 
 ## To Run
 
+The Cisco defect search requires an OAuth client. Obtain a client through the
+approved Cisco API onboarding process and provide its credentials at runtime;
+never store credentials in this repository:
+
+```bash
+export CISCO_API_CLIENT_ID='<client-id>'
+export CISCO_API_CLIENT_SECRET='<client-secret>'
+```
+
+Rotate the client secret immediately if it is ever committed, logged, or
+otherwise exposed.
+
 There will be a directory called dna-analyzer.  You can either change into directory, or run direct from the home directory.
 You will be showing menu and options and rest of them are self explanatory.
 ```
